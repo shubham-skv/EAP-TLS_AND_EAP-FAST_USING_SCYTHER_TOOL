@@ -1,0 +1,43 @@
+usertype String;
+usertype SessionKey;
+protocol EAP-FAST(UE,NW)
+{
+
+	role UE
+	{
+	fresh Rue: Nonce;
+	fresh Ruel: Nonce;
+        fresh Kseaf : SessionKey;
+        fresh Methods-UE : String;      
+	 fresh H-HandShake-UE : String;
+        var Rnw: Nonce;
+        var TLS-Start :String;
+        var Methods-NW: String;      
+        var H-HandShake-NW:String;
+        send_1(UE,NW,{k(UE,NW),Rue}pk(NW));
+        recv_2(NW,UE,TLS-Start);
+        send_3(UE,NW,Ruel,Methods-UE);           
+        claim_i2(UE,Secret,k(UE,NW));
+        claim_i3(UE,Secret,Niagree);
+        claim_i4(UE,Secret,Nisynch);
+    }
+
+    role NW
+    {
+        fresh Rnw: Nonce;
+        fresh TLS-Start :String;
+        fresh Methods-NW: String;	
+        fresh H-HandShake-NW:String;
+        var Rue: Nonce;
+	var Ruel: Nonce;
+        var Kseaf : SessionKey;
+        var Methods-UE : String;      
+        var H-HandShake-UE : String;
+        recv_1(UE,NW,{k(UE,NW),Rue}pk(NW));
+        send_2(NW,UE,TLS-Start);
+        recv_3(UE,NW,Ruel,Methods-UE);   
+        claim_i2(NW,Secret,k(UE,NW));
+        claim_i3(NW,Secret,Niagree);
+        claim_i4(NW,Secret,Nisynch);
+    }
+}
